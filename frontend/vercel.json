@@ -10,18 +10,13 @@
       "permanent": false
     },
     {
+      "source": "/admin/",
+      "destination": "https://qolmura-nqnd.vercel.app/admin/",
+      "permanent": false
+    },
+    {
       "source": "/admin/:path*",
       "destination": "https://qolmura-nqnd.vercel.app/admin/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/api/:path*",
-      "destination": "https://qolmura-nqnd.vercel.app/api/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/static/:path*",
-      "destination": "https://qolmura-nqnd.vercel.app/static/:path*",
       "permanent": false
     }
   ],

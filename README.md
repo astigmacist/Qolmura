@@ -77,7 +77,7 @@ The backend build runs migrations, collects admin assets, loads the idempotent d
 
 Create a second Vercel project with **Root Directory** set to `frontend`.
 
-`frontend/vercel.json` redirects `/admin`, `/api` and Django static paths to the deployed backend before applying the SPA fallback. The public admin entry point is `https://qolmura.vercel.app/admin/`; Vercel then sends staff to the secure Django deployment. Direct visits to `/catalog` and `/products/:slug` still return `index.html` and are handled by React. The production frontend also uses `VITE_API_BASE_URL` and `VITE_ADMIN_URL` to access Django directly.
+`frontend/vercel.json` redirects `/admin` to the deployed backend before applying the SPA fallback. The public admin entry point is `https://qolmura.vercel.app/admin`; Vercel then sends staff to the secure Django deployment. Direct visits to `/catalog` and `/products/:slug` still return `index.html` and are handled by React. The production frontend uses `VITE_API_BASE_URL` and `VITE_ADMIN_URL` to access Django directly.
 
 The storefront requests Django first and has a bundled copy of the six demo products as a read-only availability fallback. Product and seller-application changes still come from Django; the fallback only prevents an empty catalog while the API is unavailable.
 
