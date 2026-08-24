@@ -1,0 +1,37 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+  <section class="qolmura-dashboard-intro">
+    <span>QOLMURA OPERATIONS</span>
+    <h1>Маркетплейстің жағдайы</h1>
+    <p>Каталогты, шеберлерді және жаңа сатушы өтінімдерін бір жерден басқарыңыз.</p>
+  </section>
+
+  <section class="qolmura-metrics" aria-label="Негізгі көрсеткіштер">
+    <a href="{% url 'qolmura_admin:marketplace_product_changelist' %}">
+      <span>Белсенді тауарлар</span>
+      <strong>{{ qolmura_metrics.active_products }}</strong>
+      <i>Каталогты басқару →</i>
+    </a>
+    <a href="{% url 'qolmura_admin:marketplace_artisan_changelist' %}">
+      <span>Тексерілген шеберлер</span>
+      <strong>{{ qolmura_metrics.verified_artisans }}</strong>
+      <i>Шеберлерді басқару →</i>
+    </a>
+    <a class="is-accent" href="{% url 'qolmura_admin:marketplace_sellerapplication_changelist' %}?status__exact=new">
+      <span>Жаңа және қаралуда</span>
+      <strong>{{ qolmura_metrics.open_applications }}</strong>
+      <i>Өтінімдерді өңдеу →</i>
+    </a>
+    <a href="{% url 'qolmura_admin:marketplace_category_changelist' %}">
+      <span>Белсенді санаттар</span>
+      <strong>{{ qolmura_metrics.total_categories }}</strong>
+      <i>Санаттарды басқару →</i>
+    </a>
+  </section>
+
+  <div class="qolmura-admin-modules">
+    {{ block.super }}
+  </div>
+{% endblock %}

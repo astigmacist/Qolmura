@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | Qolmura Admin{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/qolmura.css' %}">
+{% endblock %}
+
+{% block branding %}
+  <div class="qolmura-admin-brand">
+    <span class="qolmura-admin-mark" aria-hidden="true"><i></i></span>
+    <span>
+      <strong>QOLMURA</strong>
+      <small>Маркетплейсті басқару</small>
+    </span>
+  </div>
+{% endblock %}
+
+{% block nav-global %}
+  <a class="qolmura-site-link" href="/" target="_blank" rel="noreferrer">Сайтты ашу ↗</a>
+{% endblock %}
