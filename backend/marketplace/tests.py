@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase
@@ -151,3 +152,17 @@ class AdminPanelTests(TestCase):
         self.assertContains(dashboard_response, "Жаңа және қаралуда")
         self.assertEqual(application_response.status_code, 200)
         self.assertContains(application_response, "Мадина Асан")
+
+
+class SeedDemoCommandTests(TestCase):
+    def test_redeploy_seed_does_not_overwrite_admin_changes(self):
+        call_command("seed_demo", verbosity=0)
+        product = Product.objects.get(slug="alma-vest")
+        product.name_ru = "Название от редактора"
+        product.save(update_fields=("name_ru",))
+
+        call_command("seed_demo", verbosity=0)
+
+        product.refresh_from_db()
+        self.assertEqual(Product.objects.count(), 6)
+        self.assertEqual(product.name_ru, "Название от редактора")

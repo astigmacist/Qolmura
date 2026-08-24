@@ -89,26 +89,26 @@ CATALOG = [
 
 
 class Command(BaseCommand):
-    help = "Create a clearly marked demonstration catalog for local product development."
+    help = "Create missing demo catalog items without overwriting content edited in the admin."
 
     def handle(self, *args, **options):
         public_site_url = os.getenv("QOLMURA_PUBLIC_SITE_URL", "http://127.0.0.1:5173").rstrip("/")
         User = get_user_model()
         for index, item in enumerate(CATALOG, start=1):
             name_kk, name_ru, category_slug = item["category"]
-            category, _ = Category.objects.update_or_create(
+            category, _ = Category.objects.get_or_create(
                 slug=category_slug,
                 defaults={"name_kk": name_kk, "name_ru": name_ru, "is_active": True, "sort_order": index},
             )
             shop_name, artisan_slug, city, story_kk, story_ru = item["artisan"]
             user, _ = User.objects.get_or_create(username=f"demo-{artisan_slug}")
-            artisan, _ = Artisan.objects.update_or_create(
+            artisan, _ = Artisan.objects.get_or_create(
                 slug=artisan_slug,
                 defaults={"owner": user, "shop_name": shop_name, "city": city, "story_kk": story_kk, "story_ru": story_ru, "status": Artisan.Status.VERIFIED, "rating": "5.00"},
             )
             defaults = {**item["product"], "artisan": artisan, "category": category, "status": Product.Status.ACTIVE, "is_demo": True}
             defaults["cover_url"] = defaults["cover_url"].replace("http://127.0.0.1:5173", public_site_url)
             slug = defaults.pop("slug")
-            Product.objects.update_or_create(slug=slug, defaults=defaults)
+            Product.objects.get_or_create(slug=slug, defaults=defaults)
 
         self.stdout.write(self.style.SUCCESS(f"Demo catalog ready: {len(CATALOG)} products."))
