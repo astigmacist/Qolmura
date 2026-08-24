@@ -6,7 +6,8 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-before-production")
-DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
+IS_VERCEL = os.getenv("VERCEL") == "1"
+DEBUG = os.getenv("DJANGO_DEBUG", "false" if IS_VERCEL else "true").lower() == "true"
 ALLOWED_HOSTS = [host for host in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,.vercel.app").split(",") if host]
 
 INSTALLED_APPS = [
@@ -81,6 +82,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 CORS_ALLOWED_ORIGINS = [origin for origin in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if origin]
 CSRF_TRUSTED_ORIGINS = [origin for origin in os.getenv(

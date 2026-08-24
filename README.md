@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-The development server proxies `/api` to Django on `127.0.0.1:8000`. The storefront is available at `http://127.0.0.1:5173`.
+The development server proxies `/api`, `/admin` and `/static` to Django on `127.0.0.1:8000`. The storefront is available at `http://127.0.0.1:5173`, and the admin opens through `http://127.0.0.1:5173/admin/`.
 
 ## Backend
 
@@ -75,14 +75,13 @@ The backend build runs migrations, collects admin assets, loads the idempotent d
 
 ### 3. Frontend project
 
-Create a second Vercel project with **Root Directory** set to `frontend`. Configure:
+Create a second Vercel project with **Root Directory** set to `frontend`.
 
-```env
-VITE_API_BASE_URL=https://your-backend.vercel.app/api/v1
-VITE_ADMIN_URL=https://your-backend.vercel.app/admin/
-```
+`frontend/vercel.json` redirects `/admin`, `/api` and Django static paths to the deployed backend before applying the SPA fallback. The public admin entry point is `https://qolmura.vercel.app/admin/`; Vercel then sends staff to the secure Django deployment. Direct visits to `/catalog` and `/products/:slug` still return `index.html` and are handled by React. The production frontend also uses `VITE_API_BASE_URL` and `VITE_ADMIN_URL` to access Django directly.
 
-`frontend/vercel.json` includes the SPA rewrite, so direct visits to `/catalog` and `/products/:slug` return `index.html` and are handled by React. Vercel serves the generated `dist/` assets; it does not run the source `index.html` directly.
+The storefront requests Django first and has a bundled copy of the six demo products as a read-only availability fallback. Product and seller-application changes still come from Django; the fallback only prevents an empty catalog while the API is unavailable.
+
+For production editing, configure `DATABASE_URL` on the backend project with a managed PostgreSQL database. SQLite bundled inside a Vercel Function is suitable only for the seeded read-only demo and must not be used as persistent production storage.
 
 Vercel does not need to be added to the application dependencies. Run the current CLI on demand for local checks:
 

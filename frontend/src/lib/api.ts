@@ -49,6 +49,14 @@ export type PaginatedProducts = {
   results: Product[]
 }
 
+function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === "AbortError"
+}
+
+async function loadDemoCatalog() {
+  return import("@/data/demoCatalog")
+}
+
 const apiBase = (import.meta.env.VITE_API_BASE_URL ?? "/api/v1").replace(/\/$/, "")
 
 export function resolveMediaUrl(url: string) {
@@ -71,16 +79,31 @@ async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
 }
 
 export function getCategories(signal?: AbortSignal) {
-  return request<{ results?: Category[] } | Category[]>(`${apiBase}/categories/`, signal).then((data) => Array.isArray(data) ? data : data.results ?? [])
+  return request<{ results?: Category[] } | Category[]>(`${apiBase}/categories/`, signal)
+    .then((data) => Array.isArray(data) ? data : data.results ?? [])
+    .catch(async (error: unknown) => {
+      if (isAbortError(error)) throw error
+      return (await loadDemoCatalog()).demoCategories
+    })
 }
 
 export function getProducts(params: URLSearchParams, signal?: AbortSignal) {
   const query = params.toString()
   return request<PaginatedProducts>(`${apiBase}/products/${query ? `?${query}` : ""}`, signal)
+    .catch(async (error: unknown) => {
+      if (isAbortError(error)) throw error
+      return (await loadDemoCatalog()).getDemoProducts(params)
+    })
 }
 
 export function getProduct(slug: string, signal?: AbortSignal) {
   return request<Product>(`${apiBase}/products/${encodeURIComponent(slug)}/`, signal)
+    .catch(async (error: unknown) => {
+      if (isAbortError(error)) throw error
+      const product = (await loadDemoCatalog()).demoProducts.find((item) => item.slug === slug)
+      if (!product) throw error
+      return product
+    })
 }
 
 export type SellerApplicationPayload = {

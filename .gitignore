@@ -11,3 +11,5 @@ media/
 staticfiles/
 work/
 _to_delete/
+.vercel
+.env*.local

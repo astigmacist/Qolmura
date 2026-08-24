@@ -258,7 +258,7 @@ function App() {
   const searchRef = useRef<HTMLInputElement>(null)
   const t = content[language]
   const scrolled = useScrolled()
-  const adminUrl = import.meta.env.VITE_ADMIN_URL ?? "http://127.0.0.1:8000/admin/"
+  const adminUrl = import.meta.env.VITE_ADMIN_URL ?? "/admin/"
   useReveal([language, featured])
 
   useEffect(() => {
@@ -364,7 +364,7 @@ function App() {
               <span key={theme} className="theme-icon">{theme === "light" ? <Moon /> : <Sun />}</span>
             </Button>
             <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex" aria-label={t.login}>
-              <a href={adminUrl} target="_blank" rel="noreferrer"><UserRound /></a>
+              <a href={adminUrl}><UserRound /></a>
             </Button>
             <Button className="desktop-seller" size="sm" onClick={() => setSellerSheetOpen(true)}><Store />{t.seller}</Button>
             <Sheet open={sellerSheetOpen} onOpenChange={(open) => {
