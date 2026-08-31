@@ -84,7 +84,7 @@ const content = {
     q1: "Qolmura деген не?",
     a1: "Qolmura — Қазақстан қолөнер шеберлері мен бірегей бұйым іздейтін сатып алушыларды байланыстыратын маркетплейс жобасы.",
     q2: "Каталог қашан ашылады?",
-    a2: "Қазірдің өзінде алғашқы демо-коллекцияны каталогта көре аласыз. Толық нұсқасы мен жаңа шеберлер туралы жаңалықтар @qolmura.kz парақшасында жарияланады.",
+    a2: "Каталогта Қызылорда облысының шеберлері ұсынған алғашқы 55 нақты бұйым бар. Жаңа шеберлер туралы жаңалықтар @qolmura.kz парақшасында жарияланады.",
     q3: "Шебер қалай қосыла алады?",
     a3: "Қазір Instagram немесе байланыс нөмірі арқылы Qolmura командасына хабарласуға болады. Шеберлер үшін тіркелу және тауар орналастыру жолы платформада бөлек қарастырылады.",
     contact: "Байланыс",
@@ -97,7 +97,6 @@ const content = {
     featuredTitle: "Соңғы қосылған бұйымдар",
     featuredLead: "Шеберлер қолымен жасалған ерекше туындылардың бір бөлігі.",
     featuredCta: "Каталогты толық қарау",
-    demoBadge: "Демо коллекция",
     uniqueBadge: "Бірегей дана",
     verifiedBadge: "Тексерілген шебер",
     favorite: "Таңдаулыға қосу",
@@ -172,7 +171,7 @@ const content = {
     q1: "Что такое Qolmura?",
     a1: "Qolmura — проект маркетплейса, который связывает мастеров Казахстана с покупателями, ищущими уникальные изделия.",
     q2: "Когда откроется каталог?",
-    a2: "Уже сейчас в каталоге доступна первая демо-коллекция. Полная версия и новости о новых мастерах публикуются на странице @qolmura.kz.",
+    a2: "В каталоге уже представлены первые 55 реальных работ мастеров Кызылординской области. Новости о новых мастерах публикуются на странице @qolmura.kz.",
     q3: "Как мастеру присоединиться?",
     a3: "Сейчас можно связаться с командой Qolmura через Instagram или по контактному номеру. Регистрация и размещение товаров для мастеров будут отдельной частью платформы.",
     contact: "Контакты",
@@ -184,7 +183,6 @@ const content = {
     featuredTitle: "Недавно добавленные изделия",
     featuredLead: "Часть уникальных работ, созданных руками мастеров.",
     featuredCta: "Смотреть весь каталог",
-    demoBadge: "Демо-коллекция",
     uniqueBadge: "Уникальный экземпляр",
     verifiedBadge: "Проверенный мастер",
     favorite: "Добавить в избранное",
@@ -521,12 +519,12 @@ function App() {
                   {featured.map((product) => (
                     <div className="reveal-item" key={product.id}>
                       <MarketplaceProductCard product={product} language={language} labels={{
-                        demo: t.demoBadge,
                         one: t.uniqueBadge,
                         verified: t.verifiedBadge,
                         favorite: t.favorite,
                         removeFavorite: t.removeFavorite,
                         open: t.openProduct,
+                        from: language === "kk" ? "бастап" : "от",
                       }} />
                     </div>
                   ))}
@@ -539,7 +537,7 @@ function App() {
         <section className="stats-band reveal">
           <div className="container stats-grid">
             <div><Sparkles /><strong>100%</strong><span>{t.stat1}</span></div>
-            <div><LayoutGrid /><strong>6</strong><span>{t.stat2}</span></div>
+            <div><LayoutGrid /><strong>8</strong><span>{t.stat2}</span></div>
             <div><Truck /><strong>2–5</strong><span>{t.stat3}</span></div>
             <div><Gem /><strong>1/1</strong><span>{t.stat4}</span></div>
           </div>

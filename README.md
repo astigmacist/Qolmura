@@ -28,7 +28,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 QOLMURA_ADMIN_PASSWORD='choose-a-local-password' python manage.py ensure_admin
-python manage.py seed_demo
+python manage.py seed_catalog
 python manage.py runserver
 ```
 

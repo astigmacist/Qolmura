@@ -9,12 +9,12 @@ import { resolveMediaUrl, type Product } from "@/lib/api"
 type Language = "kk" | "ru"
 
 type ProductCardLabels = {
-  demo: string
   one: string
   verified: string
   favorite: string
   removeFavorite: string
   open: string
+  from: string
 }
 
 function readFavorites() {
@@ -54,7 +54,6 @@ export function MarketplaceProductCard({ product, language, labels }: {
           <span className="product-open"><ArrowUpRight />{labels.open}</span>
         </a>
         <div className="product-badges">
-          {product.is_demo && <Badge className="demo-badge">{labels.demo}</Badge>}
           {product.is_one_of_a_kind && <Badge>{labels.one}</Badge>}
         </div>
         <Button
@@ -74,7 +73,7 @@ export function MarketplaceProductCard({ product, language, labels }: {
         <h2><a href={`/products/${product.slug}`}>{name}</a></h2>
         <span className="artisan-meta"><MapPin />{product.artisan.shop_name} · {product.artisan.city}</span>
         <div>
-          <strong>{new Intl.NumberFormat(language === "kk" ? "kk-KZ" : "ru-KZ").format(Number(product.price))} ₸</strong>
+          <strong>{product.price_is_from && <small>{labels.from} </small>}{new Intl.NumberFormat(language === "kk" ? "kk-KZ" : "ru-KZ").format(Number(product.price))} ₸</strong>
           <span><ShieldCheck />{labels.verified}</span>
         </div>
       </CardContent>

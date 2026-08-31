@@ -37,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = (
             "id", "name_kk", "name_ru", "slug", "description_kk", "description_ru",
             "materials_kk", "materials_ru", "dimensions_kk", "dimensions_ru", "care_kk", "care_ru",
-            "production_time_days", "cover_url", "price", "stock", "is_featured", "is_one_of_a_kind",
+            "production_time_days", "cover_url", "price", "price_is_from", "stock", "is_featured", "is_one_of_a_kind",
             "is_demo", "artisan", "category", "images", "created_at",
         )
 

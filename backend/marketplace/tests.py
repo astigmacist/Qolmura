@@ -154,15 +154,21 @@ class AdminPanelTests(TestCase):
         self.assertContains(application_response, "Мадина Асан")
 
 
-class SeedDemoCommandTests(TestCase):
+class SeedCatalogCommandTests(TestCase):
     def test_redeploy_seed_does_not_overwrite_admin_changes(self):
-        call_command("seed_demo", verbosity=0)
-        product = Product.objects.get(slug="alma-vest")
+        call_command("seed_catalog", verbosity=0)
+        product = Product.objects.get(slug="kimeshek")
         product.name_ru = "Название от редактора"
         product.save(update_fields=("name_ru",))
 
-        call_command("seed_demo", verbosity=0)
+        call_command("seed_catalog", verbosity=0)
 
         product.refresh_from_db()
-        self.assertEqual(Product.objects.count(), 6)
+        carpet = Product.objects.get(slug="tufted-carpet")
+        self.assertEqual(Product.objects.count(), 55)
+        self.assertEqual(Artisan.objects.count(), 8)
+        self.assertEqual(Category.objects.count(), 8)
+        self.assertFalse(Product.objects.filter(is_demo=True).exists())
         self.assertEqual(product.name_ru, "Название от редактора")
+        self.assertTrue(carpet.price_is_from)
+        self.assertEqual(carpet.price, 25000)

@@ -45,7 +45,7 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product, site=qolmura_admin_site)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name_kk", "artisan", "category", "price", "stock", "status", "is_featured", "is_demo")
+    list_display = ("name_kk", "artisan", "category", "price", "price_is_from", "stock", "status", "is_featured", "is_demo")
     list_filter = ("status", "is_featured", "is_one_of_a_kind", "is_demo", "category")
     search_fields = ("name_kk", "name_ru", "artisan__shop_name")
     prepopulated_fields = {"slug": ("name_kk",)}
@@ -56,7 +56,7 @@ class ProductAdmin(admin.ModelAdmin):
         ("Негізгі ақпарат", {"fields": ("artisan", "category", "status", "slug")}),
         ("Қазақша контент", {"fields": ("name_kk", "description_kk", "materials_kk", "dimensions_kk", "care_kk")}),
         ("Контент на русском", {"fields": ("name_ru", "description_ru", "materials_ru", "dimensions_ru", "care_ru")}),
-        ("Сату", {"fields": ("price", "stock", "production_time_days", "cover_url")}),
+        ("Сату", {"fields": ("price", "price_is_from", "stock", "production_time_days", "cover_url")}),
         ("Каталогта көрсету", {"fields": ("is_featured", "is_one_of_a_kind", "is_demo")}),
     )
 

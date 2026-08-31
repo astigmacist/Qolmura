@@ -32,12 +32,15 @@ const copy = {
     errorTitle: "Каталогқа қосылу мүмкін болмады",
     errorText: "Бірнеше минуттан кейін қайта көріңіз.",
     retry: "Қайта көру",
+    previous: "Алдыңғы",
+    next: "Келесі",
+    page: "Бет",
     one: "Бірегей дана",
     verified: "Тексерілген шебер",
-    demo: "Демо коллекция",
     favorite: "Таңдаулыға қосу",
     removeFavorite: "Таңдаулыдан алып тастау",
     open: "Толығырақ",
+    from: "бастап",
   },
   ru: {
     back: "На главную",
@@ -61,12 +64,15 @@ const copy = {
     errorTitle: "Не удалось подключиться к каталогу",
     errorText: "Попробуйте ещё раз через несколько минут.",
     retry: "Повторить",
+    previous: "Назад",
+    next: "Дальше",
+    page: "Страница",
     one: "Уникальный экземпляр",
     verified: "Проверенный мастер",
-    demo: "Демо-коллекция",
     favorite: "Добавить в избранное",
     removeFavorite: "Убрать из избранного",
     open: "Подробнее",
+    from: "от",
   },
 } as const
 
@@ -81,6 +87,7 @@ export function CatalogPage({ language, theme, onLanguageChange, onThemeChange }
   const [search, setSearch] = useState(initialSearch)
   const [category, setCategory] = useState("")
   const [ordering, setOrdering] = useState("-created_at")
+  const [page, setPage] = useState(1)
   const [categories, setCategories] = useState<Category[]>([])
   const [catalog, setCatalog] = useState<PaginatedProducts | null>(null)
   const [loading, setLoading] = useState(true)
@@ -100,6 +107,7 @@ export function CatalogPage({ language, theme, onLanguageChange, onThemeChange }
     if (search) params.set("search", search)
     if (category) params.set("category__slug", category)
     if (ordering) params.set("ordering", ordering)
+    if (page > 1) params.set("page", String(page))
 
     window.history.replaceState(null, "", `/catalog${params.toString() ? `?${params}` : ""}`)
     Promise.all([getCategories(controller.signal), getProducts(params, controller.signal)])
@@ -115,10 +123,11 @@ export function CatalogPage({ language, theme, onLanguageChange, onThemeChange }
         if (!controller.signal.aborted) setLoading(false)
       })
     return () => controller.abort()
-  }, [category, ordering, search])
+  }, [category, ordering, page, search])
 
   function submitSearch(event: FormEvent) {
     event.preventDefault()
+    setPage(1)
     setSearch(query.trim())
   }
 
@@ -127,9 +136,16 @@ export function CatalogPage({ language, theme, onLanguageChange, onThemeChange }
     setSearch("")
     setCategory("")
     setOrdering("-created_at")
+    setPage(1)
   }
 
   const hasFilters = Boolean(search || category)
+  const totalPages = Math.max(1, Math.ceil((catalog?.count ?? 0) / 24))
+
+  function changePage(nextPage: number) {
+    setPage(nextPage)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   return (
     <div className="catalog-page">
@@ -163,10 +179,10 @@ export function CatalogPage({ language, theme, onLanguageChange, onThemeChange }
           <div className="container">
             <div className="catalog-toolbar">
               <div className="category-filters" aria-label="Категории">
-                <button className={!category ? "active" : ""} onClick={() => setCategory("")}>{t.all}</button>
-                {categories.map((item) => <button key={item.slug} className={category === item.slug ? "active" : ""} onClick={() => setCategory(item.slug)}>{language === "kk" ? item.name_kk : item.name_ru}<span>{item.product_count}</span></button>)}
+                <button className={!category ? "active" : ""} onClick={() => { setCategory(""); setPage(1) }}>{t.all}</button>
+                {categories.map((item) => <button key={item.slug} className={category === item.slug ? "active" : ""} onClick={() => { setCategory(item.slug); setPage(1) }}>{language === "kk" ? item.name_kk : item.name_ru}<span>{item.product_count}</span></button>)}
               </div>
-              <label className="sort-control"><SlidersHorizontal /><span>{t.sort}</span><select value={ordering} onChange={(event) => setOrdering(event.target.value)}><option value="-created_at">{t.newest}</option><option value="price">{t.low}</option><option value="-price">{t.high}</option></select></label>
+              <label className="sort-control"><SlidersHorizontal /><span>{t.sort}</span><select value={ordering} onChange={(event) => { setOrdering(event.target.value); setPage(1) }}><option value="-created_at">{t.newest}</option><option value="price">{t.low}</option><option value="-price">{t.high}</option></select></label>
             </div>
 
             {!loading && !error && <p className="catalog-count">{catalog?.count ?? 0} {t.found}</p>}
@@ -179,15 +195,22 @@ export function CatalogPage({ language, theme, onLanguageChange, onThemeChange }
               <div className="product-grid">
                 {catalog?.results.map((product) => (
                   <MarketplaceProductCard key={product.id} product={product} language={language} labels={{
-                    demo: t.demo,
                     one: t.one,
                     verified: t.verified,
                     favorite: t.favorite,
                     removeFavorite: t.removeFavorite,
                     open: t.open,
+                    from: t.from,
                   }} />
                 ))}
               </div>
+            )}
+            {!loading && !error && Boolean(catalog?.results.length) && totalPages > 1 && (
+              <nav className="catalog-pagination" aria-label={t.page}>
+                <Button variant="outline" disabled={page <= 1} onClick={() => changePage(page - 1)}><ArrowLeft />{t.previous}</Button>
+                <span>{t.page} <strong>{page}</strong> / {totalPages}</span>
+                <Button variant="outline" disabled={page >= totalPages} onClick={() => changePage(page + 1)}>{t.next}<ArrowRight /></Button>
+              </nav>
             )}
           </div>
         </section>

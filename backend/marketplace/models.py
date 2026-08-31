@@ -71,6 +71,7 @@ class Product(TimeStampedModel):
     production_time_days = models.PositiveSmallIntegerField(default=3)
     cover_url = models.URLField(blank=True, help_text="Remote image URL for the initial catalog; migrate to managed media in production.")
     price = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
+    price_is_from = models.BooleanField(default=False, help_text="Show the catalog price as a minimum when variants have different prices.")
     stock = models.PositiveIntegerField(default=1)
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.DRAFT, db_index=True)
     is_featured = models.BooleanField(default=False, db_index=True)
