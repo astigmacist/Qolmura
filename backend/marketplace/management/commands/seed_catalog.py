@@ -4,11 +4,14 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from marketplace.catalog_2026 import ARTISANS, CATEGORIES, PRODUCTS
+from marketplace.catalog_2026 import ARTISANS as ASTANA_ARTISANS, CATEGORIES, PRODUCTS as ASTANA_PRODUCTS
+from marketplace.catalog_paris_2026 import ARTISANS as PARIS_ARTISANS, PRODUCTS as PARIS_PRODUCTS
 from marketplace.models import Artisan, Category, Product
 
 
 LEGACY_CATEGORY_SLUGS = {"ceramics", "felt", "jewelry", "leather", "wood", "clothing"}
+ARTISANS = {**ASTANA_ARTISANS, **PARIS_ARTISANS}
+PRODUCTS = [*ASTANA_PRODUCTS, *PARIS_PRODUCTS]
 
 
 def material_for(product):

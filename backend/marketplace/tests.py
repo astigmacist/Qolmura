@@ -165,10 +165,11 @@ class SeedCatalogCommandTests(TestCase):
 
         product.refresh_from_db()
         carpet = Product.objects.get(slug="tufted-carpet")
-        self.assertEqual(Product.objects.count(), 55)
-        self.assertEqual(Artisan.objects.count(), 8)
+        self.assertEqual(Product.objects.count(), 77)
+        self.assertEqual(Artisan.objects.count(), 9)
         self.assertEqual(Category.objects.count(), 8)
         self.assertFalse(Product.objects.filter(is_demo=True).exists())
         self.assertEqual(product.name_ru, "Название от редактора")
         self.assertTrue(carpet.price_is_from)
         self.assertEqual(carpet.price, 25000)
+        self.assertEqual(Product.objects.get(slug="asyk-chess-akbota").artisan.shop_name, "Шамшиева Ақбота Сеилханқызы")
