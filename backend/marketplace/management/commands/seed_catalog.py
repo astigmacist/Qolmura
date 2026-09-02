@@ -6,12 +6,13 @@ from django.db import transaction
 
 from marketplace.catalog_2026 import ARTISANS as ASTANA_ARTISANS, CATEGORIES, PRODUCTS as ASTANA_PRODUCTS
 from marketplace.catalog_paris_2026 import ARTISANS as PARIS_ARTISANS, PRODUCTS as PARIS_PRODUCTS
+from marketplace.catalog_paris_september_2026 import ARTISANS as PARIS_SEPTEMBER_ARTISANS, PRODUCTS as PARIS_SEPTEMBER_PRODUCTS
 from marketplace.models import Artisan, Category, Product
 
 
 LEGACY_CATEGORY_SLUGS = {"ceramics", "felt", "jewelry", "leather", "wood", "clothing"}
-ARTISANS = {**ASTANA_ARTISANS, **PARIS_ARTISANS}
-PRODUCTS = [*ASTANA_PRODUCTS, *PARIS_PRODUCTS]
+ARTISANS = {**ASTANA_ARTISANS, **PARIS_ARTISANS, **PARIS_SEPTEMBER_ARTISANS}
+PRODUCTS = [*ASTANA_PRODUCTS, *PARIS_PRODUCTS, *PARIS_SEPTEMBER_PRODUCTS]
 
 
 def material_for(product):
@@ -74,7 +75,9 @@ class Command(BaseCommand):
         for product in PRODUCTS:
             official_slugs.add(product["slug"])
             artisan = artisans[product["artisan"]]
-            materials_kk, materials_ru = material_for(product)
+            inferred_materials_kk, inferred_materials_ru = material_for(product)
+            materials_kk = product.get("materials_kk") or inferred_materials_kk
+            materials_ru = product.get("materials_ru") or inferred_materials_ru
             source_note = product["source_note"]
             catalog_product, created = Product.objects.get_or_create(
                 slug=product["slug"],
@@ -87,8 +90,8 @@ class Command(BaseCommand):
                     "description_ru": f"{product['name_ru']}. Автор работы: {artisan.shop_name}. Количество и цена в исходном каталоге: {source_note}.",
                     "materials_kk": materials_kk,
                     "materials_ru": materials_ru,
-                    "dimensions_kk": "",
-                    "dimensions_ru": "",
+                    "dimensions_kk": product.get("dimensions_kk", ""),
+                    "dimensions_ru": product.get("dimensions_ru", ""),
                     "care_kk": "",
                     "care_ru": "",
                     "production_time_days": 0,

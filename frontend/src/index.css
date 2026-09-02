@@ -283,16 +283,18 @@ footer { border-top: 1px solid var(--border); background: var(--background); }
 .catalog-search input { height: 52px; border-radius: 999px; background: var(--card); padding-left: 50px; padding-right: 56px; font-size: 15px; }
 .catalog-search button { position: absolute; right: 4px; width: 44px; height: 44px; color: var(--primary-foreground); }
 .catalog-actions { display: flex; justify-self: end; align-items: center; gap: 2px; }
-.catalog-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); padding: 34px 0 46px; background-color: var(--surface-soft); }
-.catalog-hero::after { position: absolute; top: -120px; right: max(-70px, calc((100vw - 1360px) / 2)); width: 310px; height: 310px; transform: rotate(45deg); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); content: ""; pointer-events: none; }
+.catalog-hero { position: relative; display: flex; min-height: clamp(400px, 36vw, 510px); overflow: hidden; border-bottom: 1px solid var(--border); padding: 36px 0 58px; background-color: #ead7bd; background-image: url("/catalog-syr-eli.webp"); background-position: center; background-size: cover; }
+.catalog-hero::before { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(245, 235, 221, .98) 0%, rgba(245, 235, 221, .9) 30%, rgba(245, 235, 221, .46) 51%, rgba(245, 235, 221, .08) 73%); content: ""; pointer-events: none; }
+.dark .catalog-hero::before { background: linear-gradient(90deg, rgba(18, 15, 13, .96) 0%, rgba(18, 15, 13, .86) 31%, rgba(18, 15, 13, .48) 54%, rgba(18, 15, 13, .13) 78%); }
+.catalog-hero > .container { display: flex; flex-direction: column; }
 .catalog-back { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; color: var(--muted-foreground); font-size: 14px; font-weight: 600; transition: color .2s ease; }
 .catalog-back:hover { color: var(--foreground); }
 .catalog-back svg { width: 14px; }
-.catalog-heading { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px 56px; margin-top: 32px; }
+.catalog-heading { position: relative; z-index: 1; display: flex; max-width: 720px; flex: 1; flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; padding: 24px 0 10px; }
 .catalog-heading > div { min-width: 0; }
 .catalog-heading > div > span { color: var(--accent); font-size: 12px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
 .catalog-heading h1 { max-width: 760px; margin: 11px 0 0; font-size: clamp(42px, 4.4vw, 64px); font-weight: 650; line-height: 1.08; letter-spacing: -.05em; text-wrap: balance; }
-.catalog-heading > p { max-width: 440px; margin: 0 0 6px; color: var(--muted-foreground); font-size: 16px; line-height: 1.75; }
+.catalog-heading > p { max-width: 540px; margin: 24px 0 0; color: color-mix(in srgb, var(--foreground) 68%, transparent); font-size: 16px; line-height: 1.75; }
 .catalog-body { min-height: 620px; padding: 36px 0 110px; }
 .catalog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 30px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
 .category-filters { display: flex; flex: 1; gap: 7px; overflow-x: auto; scrollbar-width: none; }
@@ -530,8 +532,10 @@ footer { border-top: 1px solid var(--border); background: var(--background); }
   .footer-grid { grid-template-columns: 1fr; gap: 30px; }
   .footer-grid > div:first-child { grid-column: auto; }
   .footer-contact { justify-content: start; }
-  .catalog-hero { padding: 24px 0 34px; }
-  .catalog-heading { margin-top: 22px; }
+  .catalog-hero { min-height: 430px; padding: 24px 0 32px; background-position: 57% center; }
+  .catalog-hero::before { background: linear-gradient(90deg, rgba(245, 235, 221, .98) 0%, rgba(245, 235, 221, .91) 58%, rgba(245, 235, 221, .4) 100%); }
+  .dark .catalog-hero::before { background: linear-gradient(90deg, rgba(18, 15, 13, .97) 0%, rgba(18, 15, 13, .9) 58%, rgba(18, 15, 13, .48) 100%); }
+  .catalog-heading { justify-content: flex-end; padding-bottom: 18px; }
   .catalog-heading h1 { font-size: clamp(36px, 10.6vw, 46px); line-height: 1.12; }
   .catalog-heading > p { font-size: 15px; }
   .catalog-body { padding-top: 24px; }
